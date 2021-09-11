@@ -1,0 +1,23 @@
+**************************************
+
+            INSTRUCCIONES
+
+**************************************
+
+OPCION 1 : MANUAL
+
+Al compilar los codigos para los canales debe realizarse de la siguiente manera:
+
+
+gcc canal1.c -o canal1
+gcc canal2.c -o canal2
+gcc canal3.c -o canal3
+gcc menu.c -o menu
+
+y Ejecutar: ./menu
+
+
+OPCION 2 : CON SCRIPT
+
+1. Correr comando: ./build.sh
+2. Ejecutar menu: ./menu
