@@ -7,8 +7,10 @@
 #include <sys/wait.h>
 #define N 10
 
+//MATRIZ PIPE
 int channel[N][2];
 
+// THREAD ESCRITURA:
 void *escribir(void *tid)
 {
     char msg[15];
@@ -21,6 +23,7 @@ void *escribir(void *tid)
     return NULL;
 }
 
+// THREAD LECTURA:
 void *leer(void *tid)
 {
     long index = (long)tid;
@@ -33,33 +36,47 @@ void *leer(void *tid)
 
 int main(int argc, char *argv[])
 {
+    // Inicializacion arreglo de threads.
     pthread_t t[N + 1];
+
+    // Creacion de Pipe
     for (int i = 0; i < N; i++)
     {
         pipe(channel[i]);
     }
-    if (!fork())
+
+    if (!fork()) // HIJO
     {
+        // Creacion Threads de escritura.
         for (long i = 0; i < N; i++)
         {
             pthread_create(&t[i], NULL, escribir, (void *)i);
         }
+
+        // Espera para la finalizacion de cada Thread de escritura.
         for (long i = 0; i < N; i++)
         {
             pthread_join(t[i], NULL);
         }
+
+        // Muere el proceso.
         exit(0);
     }
-    else
+    else // PADRE
     {
+        // Creacion Threads de lectura.
         for (long i = 0; i < N; i++)
         {
             pthread_create(&t[i], NULL, leer, (void *)i);
         }
+
+        // Espera para la finalizacion de cada Thread de lectura.
         for (long i = 0; i < N; i++)
         {
             pthread_join(t[i], NULL);
         }
+
+        // Espera a que proceso hijo termine.
         wait(NULL);
     }
 
